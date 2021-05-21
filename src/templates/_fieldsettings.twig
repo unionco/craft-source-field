@@ -1,0 +1,84 @@
+{% import "_includes/forms" as forms %}
+
+{% set entrySourceType = 'craft\\elements\\Entry' %}
+{% set categorySourceType = 'craft\\elements\\Category' %}
+{% set tagSourceType = 'craft\\elements\\Tag' %}
+{% set commerceSourceType = 'craft\\commerce\\elements\\Product' %}
+
+{% block fieldSettings %}
+
+    {% if commerceInstalled %}
+        {{ forms.selectField({
+            label: "Element Type"|t('app'),
+            instructions: "What type of Element?"|t('app'),
+            id: 'sourceType',
+            name: 'sourceType',
+            options: sourceTypes,
+            value: field.sourceType,
+            warning: "Changing this may result in data loss."|t('app'),
+            toggle: true
+        }) }}
+    {% endif %}
+
+    {% set showEntries = field.sourceType == entrySourceType %}
+    <div id="{{ entrySourceType|id }}" {% if not showEntries %} class="hidden"{% endif %}>
+        {{ forms.checkboxSelectField({
+            label: "Sources"|t('app'),
+            instructions: "Which sources do you want to select from?"|t('app'),
+            id: 'entrySources',
+            name: 'entrySources',
+            options: entryOptions,
+            values: field.entrySources,
+            showAllOption: true,
+        }) }}
+    </div>
+
+    {% set showCat = field.sourceType == categorySourceType %}
+    <div id="{{ categorySourceType|id }}" {% if not showCat %} class="hidden"{% endif %}>
+        {{ forms.checkboxSelectField({
+            label: "Sources"|t('app'),
+            instructions: "Which sources do you want to select from?"|t('app'),
+            id: 'categorySources',
+            name: 'categorySources',
+            options: categoryOptions,
+            values: field.categorySources,
+            showAllOption: true,
+        }) }}
+    </div>
+
+    {% set showTag = field.sourceType == tagSourceType %}
+    <div id="{{ tagSourceType|id }}" {% if not showTag %} class="hidden"{% endif %}>
+        {{ forms.checkboxSelectField({
+            label: "Sources"|t('app'),
+            instructions: "Which sources do you want to select from?"|t('app'),
+            id: 'tagSources',
+            name: 'tagSources',
+            options: tagOptions,
+            values: field.tagSources,
+            showAllOption: true,
+        }) }}
+    </div>
+
+    {% set showCommerce = field.sourceType == commerceSourceType %}
+    <div id="{{ commerceSourceType|id }}" {% if not showCommerce %} class="hidden"{% endif %}>
+        {{ forms.checkboxSelectField({
+            label: "Sources"|t('app'),
+            instructions: "Which sources do you want to select from?"|t('app'),
+            id: 'commerceSources',
+            name: 'commerceSources',
+            options: commerceOptions,
+            values: field.commerceSources,
+            showAllOption: true,
+        }) }}
+    </div>
+
+    {{ forms.textField({
+        label: "Limit"|t('app'),
+        instructions: "Limit the number of selectable sources."|t('app'),
+        id: 'limit',
+        name: 'limit',
+        value: field.limit,
+        size: 2,
+        errors: field.getErrors('limit')
+    }) }}
+{% endblock %}
